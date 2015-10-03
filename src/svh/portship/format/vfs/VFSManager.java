@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import svh.portship.Portship;
 
@@ -25,16 +23,11 @@ import svh.portship.Portship;
  * @author Josh Junon
  *
  */
-public class VFSManager {
+public final class VFSManager {
 
-	@SuppressWarnings("unused")
-	private final Map<Path, VFSArchive> archives = new HashMap<>();
+	private VFSManager() {}
 
-	public VFSManager() {
-	}
-
-	@SuppressWarnings({ "static-method" })
-	public IDXResult loadIDX(File idx) throws FileNotFoundException, IOException {
+	public static IDXResult loadIDX(File idx) throws FileNotFoundException, IOException {
 		IDXResult result = new IDXResult();
 
 		try (final VFSRandomAccessFile d = new VFSRandomAccessFile(idx, "r")) {
@@ -48,6 +41,7 @@ public class VFSManager {
 			for (int i = 0; i < entryCount; i++) {
 				IDXResult.Entry entry = new IDXResult.Entry();
 
+				entry.archive.root = base;
 				entry.archive.name = d.readShortString();
 				entry.archive.file = base.resolve(entry.archive.name).toFile();
 				entry.offset = d.readIntBE(); // see notes at class javadoc.
@@ -75,7 +69,7 @@ public class VFSManager {
 		for (int i = 0; i < count; i++) {
 			VFSFile file = VFSManager.readFileEntry(d, entry);
 			entry.archive.files.put(file.path, file);
-			Portship.LOG.finest(file.path);
+			Portship.LOG.finest(String.format("\u001b[1m%s:\u001b[0m\t%s", entry.archive.name, file.path));
 		}
 	}
 

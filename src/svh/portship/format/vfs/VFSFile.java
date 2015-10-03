@@ -3,6 +3,7 @@ package svh.portship.format.vfs;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 public class VFSFile {
 
@@ -36,27 +37,49 @@ public class VFSFile {
 	public long getBlockSize() {
 		return this.blockSize;
 	}
+	
+	public boolean isCompressed() {
+		return this.compressed;
+	}
+	
+	public boolean isEncrypted() {
+		return this.encrypted;
+	}
+	
+	public boolean isDeleted() {
+		return this.deleted;
+	}
+	
+	public String getNormalizedPath() {
+		return VFSFile.winToUnix(this.path);
+	}
 
 	public InputStream getInputStream() throws IOException {
+		if (this.parent.isRoot()) {
+			return new FileInputStream(this.getArchive().root.resolve(VFSFile.winToUnix(this.path)).toFile());
+		}
+
 		return new VFSFileStream();
+	}
+	
+	private static String winToUnix(String path) {
+		return path.replace('\\', '/');
 	}
 
 	private class VFSFileStream extends InputStream {
 
-		private final InputStream is;
+		private final RandomAccessFile raf;
 		private long			  count	= 0;
 
 		public VFSFileStream() throws IOException {
-			this.is = new FileInputStream(VFSFile.this.getArchive().file);
+			this.raf = new RandomAccessFile(VFSFile.this.getArchive().file, "r");
 			long absoluteOffset = VFSFile.this.getArchive().initialOffset + VFSFile.this.offset;
-			for (int i = 0; i < absoluteOffset; i++) {
-				this.is.read();
-			}
+			this.raf.seek(absoluteOffset);
 		}
 
 		@Override
 		public void close() throws IOException {
-			this.is.close();
+			this.raf.close();
 		}
 
 		@Override
@@ -65,7 +88,7 @@ public class VFSFile {
 				return -1;
 			}
 
-			return this.is.read();
+			return this.raf.read();
 		}
 
 		@Override

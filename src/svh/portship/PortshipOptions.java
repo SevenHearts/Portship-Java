@@ -12,6 +12,11 @@ import com.beust.jcommander.ParameterException;
 public class PortshipOptions {
 	
 	@Parameter(
+			names = { "--all", "--full" },
+			description = "Don't condense the log outputs")
+	public boolean full = false;
+	
+	@Parameter(
 			names = "--log",
 			description = "Specifies the logging level",
 			arity = 1,
@@ -31,6 +36,24 @@ public class PortshipOptions {
 			arity = 1,
 			validateValueWith = PrefixExistenceChecker.class)
 	public File prefix;
+	
+	@Parameter(
+			names = { "--out", "--target" },
+			description = "Directory to place processed files",
+			required = true,
+			arity = 1,
+			validateValueWith = TargetChecker.class)
+	public File target;
+	
+	public static class TargetChecker implements IValueValidator<File> {
+
+		@Override
+		public void validate(String name, File value) throws ParameterException {
+			if (value.exists() && !value.isDirectory()) {
+				throw new ParameterException("target path exists and is not a directory: " + value.toString());
+			}
+		}
+	}
 
 	public static class PrefixExistenceChecker implements IValueValidator<File> {
 		public PrefixExistenceChecker() {

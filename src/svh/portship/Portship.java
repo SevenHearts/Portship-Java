@@ -18,7 +18,7 @@ import svh.portship.format.vfs.VFSManager.IDXResult;
 public class Portship {
 
 	static final Pattern ANSI_PATTERN = Pattern
-			.compile("[\\u001b\\u009b][\\[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry\\=\\>\\<]");
+			.compile("[\\u001b\\u009b][\\[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]");
 
 	public static final Logger LOG = Logger.getLogger("portship");
 
@@ -38,9 +38,7 @@ public class Portship {
 
 		Portship.setupLogger(opts.logLevel, opts.ansi);
 
-		VFSManager manager = new VFSManager();
-
-		IDXResult idxResult = manager.loadIDX(opts.prefix.toPath().resolve("data.idx").toFile());
+		IDXResult idxResult = VFSManager.loadIDX(opts.prefix.toPath().resolve("data.idx").toFile());
 		Portship.LOG.info("VFS standard version: " + idxResult.getStdVersion());
 		Portship.LOG.info("VFS current version: " + idxResult.getCurrentVersion());
 		Portship.LOG.info(String.format("found %d VFS entries", idxResult.getEntries().size()));
@@ -49,6 +47,16 @@ public class Portship {
 			Portship.LOG.info("- name: " + entry.getArchive().getName());
 			Portship.LOG.info("  offset: " + entry.getOffset());
 			Portship.LOG.info("  file count: " + entry.getArchive().count());
+		}
+
+		Portship.LOG.info("\u001b[1;32midx file OK\u001b[0m");
+		Portship.LOG.info("beginning conversion");
+		boolean success = PortshipConverter.convert(idxResult, opts.target, opts.full);
+
+		if (success) {
+			Portship.LOG.info("\u001b[32;1;7mSUCCESS\u001b[0m");
+		} else {
+			System.exit(2);
 		}
 	}
 
@@ -70,7 +78,7 @@ public class Portship {
 				}
 
 				System.out.format("%s: [%s]\t%s%n", record.getLoggerName(), record.getLevel().getName(),
-						record.getMessage());
+						message);
 			}
 
 			@Override
