@@ -69,7 +69,8 @@ public class VFSManager {
 		int count = d.readIntBE();
 		Portship.LOG.finer(String.format("found %d entries", count));
 		d.readIntBE(); // this isn't really used anywhere.
-		entry.archive.initialOffset = d.readIntBE(); // see notes at class javadoc.
+		entry.archive.initialOffset = d.readIntBE(); // see notes at class
+													 // javadoc.
 
 		for (int i = 0; i < count; i++) {
 			VFSFile file = VFSManager.readFileEntry(d, entry);
@@ -114,7 +115,7 @@ public class VFSManager {
 
 		public static class Entry {
 
-			VFSArchive archive	= new VFSArchive();
+			VFSArchive archive = new VFSArchive();
 			long	   offset;
 
 			public long getOffset() {

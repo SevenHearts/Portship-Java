@@ -11,7 +11,7 @@ public class VFSRandomAccessFile extends RandomAccessFile {
 	public VFSRandomAccessFile(File file, String mode) throws FileNotFoundException {
 		super(file, mode);
 	}
-	
+
 	@Override
 	public void seek(long pos) throws IOException {
 		if (pos < 0) {
@@ -23,36 +23,27 @@ public class VFSRandomAccessFile extends RandomAccessFile {
 		}
 		super.seek(pos);
 	}
-	
+
 	public long readLongBE() throws IOException {
 		byte[] buf = new byte[8];
 		int nread = this.read(buf);
 		if (nread != 8) {
 			throw new EOFException();
 		}
-		
-		long l = ((buf[7] & 0xFF) << 56)
-				| ((buf[6] & 0xFF) << 48)
-				| ((buf[5] & 0xFF) << 40)
-				| ((buf[4] & 0xFF) << 32)
-				| ((buf[3] & 0xFF) << 24)
-				| ((buf[2] & 0xFF) << 16)
-				| ((buf[1] & 0xFF) << 8)
-				| (buf[0] & 0xFF);
+
+		long l = ((buf[7] & 0xFF) << 56) | ((buf[6] & 0xFF) << 48) | ((buf[5] & 0xFF) << 40) | ((buf[4] & 0xFF) << 32)
+				| ((buf[3] & 0xFF) << 24) | ((buf[2] & 0xFF) << 16) | ((buf[1] & 0xFF) << 8) | (buf[0] & 0xFF);
 		return l;
 	}
-	
+
 	public int readIntBE() throws IOException {
 		byte[] buf = new byte[4];
 		int nread = this.read(buf);
 		if (nread != 4) {
 			throw new EOFException();
 		}
-		
-		return ((buf[3] & 0xFF) << 24)
-				| ((buf[2] & 0xFF) << 16)
-				| ((buf[1] & 0xFF) << 8)
-				| (buf[0] & 0xFF);
+
+		return ((buf[3] & 0xFF) << 24) | ((buf[2] & 0xFF) << 16) | ((buf[1] & 0xFF) << 8) | (buf[0] & 0xFF);
 	}
 
 	public short readShortBE() throws IOException {
@@ -61,8 +52,8 @@ public class VFSRandomAccessFile extends RandomAccessFile {
 		if (nread != 2) {
 			throw new EOFException();
 		}
-		
-		return (short)(((buf[1] & 0xFF) << 8) | (buf[0] & 0xFF));
+
+		return (short) (((buf[1] & 0xFF) << 8) | (buf[0] & 0xFF));
 	}
 
 	public String readByteString() throws IOException {

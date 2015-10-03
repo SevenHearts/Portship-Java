@@ -17,8 +17,9 @@ import svh.portship.format.vfs.VFSManager.IDXResult;
 
 public class Portship {
 
-	static final Pattern ANSI_PATTERN = Pattern.compile("[\\u001b\\u009b][\\[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry\\=\\>\\<]");
-	
+	static final Pattern ANSI_PATTERN = Pattern
+			.compile("[\\u001b\\u009b][\\[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry\\=\\>\\<]");
+
 	public static final Logger LOG = Logger.getLogger("portship");
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
@@ -53,11 +54,11 @@ public class Portship {
 
 	private static void setupLogger(Level level, final boolean ansi) {
 		Portship.LOG.setUseParentHandlers(false);
-		
+
 		if (level != null) {
 			Portship.LOG.setLevel(level);
 		}
-		
+
 		Portship.LOG.addHandler(new Handler() {
 
 			@Override

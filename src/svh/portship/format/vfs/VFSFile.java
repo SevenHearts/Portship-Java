@@ -36,24 +36,24 @@ public class VFSFile {
 	public long getBlockSize() {
 		return this.blockSize;
 	}
-	
+
 	public InputStream getInputStream() throws IOException {
 		return new VFSFileStream();
 	}
-	
+
 	private class VFSFileStream extends InputStream {
+
 		private final InputStream is;
-		private long count = 0;
-		
+		private long			  count	= 0;
+
 		public VFSFileStream() throws IOException {
 			this.is = new FileInputStream(VFSFile.this.getArchive().file);
-			long absoluteOffset = VFSFile.this.getArchive().initialOffset +
-					VFSFile.this.offset;
+			long absoluteOffset = VFSFile.this.getArchive().initialOffset + VFSFile.this.offset;
 			for (int i = 0; i < absoluteOffset; i++) {
 				this.is.read();
 			}
 		}
-		
+
 		@Override
 		public void close() throws IOException {
 			this.is.close();
@@ -64,10 +64,10 @@ public class VFSFile {
 			if (this.count++ >= VFSFile.this.length) {
 				return -1;
 			}
-			
+
 			return this.is.read();
 		}
-		
+
 		@Override
 		public int available() throws IOException {
 			return (int) Math.min(super.available(), VFSFile.this.length - this.count);
