@@ -1,0 +1,3 @@
+[submodule "lib/jmagick"]
+	path = lib/jmagick
+	url = https://github.com/techblue/jmagick.git
