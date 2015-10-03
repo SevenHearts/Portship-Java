@@ -53,8 +53,8 @@ public final class PortshipExtractor {
 					continue;
 				}
 
-				String outFilePath = targetDir.toPath().resolve(file.getNormalizedPath()).toString();
-				outFilePath = PortshipExtractor.capitalizePath(outFilePath);
+				String outFilePath = PortshipExtractor.capitalizePath(file.getNormalizedPath());
+				outFilePath = targetDir.toPath().resolve(outFilePath).toString();
 				File outFile = new File(outFilePath);
 
 				outFile.getParentFile().mkdirs();
@@ -93,7 +93,7 @@ public final class PortshipExtractor {
 		StringBuffer builder = new StringBuffer();
 		Matcher matcher = PortshipExtractor.CAP_PATTERN.matcher(path);
 		while (matcher.find()) {
-			matcher.appendReplacement(builder, matcher.group(1).toUpperCase() + matcher.group(2));
+			matcher.appendReplacement(builder, matcher.group(1).toUpperCase() + matcher.group(2) + "/");
 		}
 		matcher.appendTail(builder);
 		return builder.toString();
