@@ -69,14 +69,14 @@ public final class PortshipExtractor {
 						} else {
 							ConversionResult result = PortshipConverter.convert(outFile, fis, progress);
 							if (result == null) {
-								Portship.LOG.info(progress + String.format("\u001b[1mskip:\u001b %s (skipped)", file.getNormalizedPath()));
+								Portship.LOG.info(progress + String.format("\u001b[1mskip:\u001b[0m %s (skipped)", file.getNormalizedPath()));
 							}
 						}
 					}
 				} catch (FileNotFoundException e) {
 					Portship.LOG.warning(progress
 							+ String.format("\u001b[33mskip\u001b[0m %s (not found)", file.getNormalizedPath()));
-					Portship.LOG.finest(e.toString());
+					Portship.LOG.finest(progress + e.toString());
 				} catch (IOException e) {
 					Portship.LOG.warning(
 							progress + String.format("\u001b[31;1mskip\u001b[0m %s (error)", file.getNormalizedPath()));
