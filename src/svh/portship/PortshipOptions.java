@@ -12,6 +12,11 @@ import com.beust.jcommander.ParameterException;
 public class PortshipOptions {
 	
 	@Parameter(
+			names = { "--no-convert", "--extract-only" },
+			description = "Don't convert files; just extract them")
+	public boolean extractOnly = false;
+	
+	@Parameter(
 			names = { "--all", "--full" },
 			description = "Don't condense the log outputs")
 	public boolean full = false;

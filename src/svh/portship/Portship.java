@@ -51,7 +51,7 @@ public class Portship {
 
 		Portship.LOG.info("\u001b[1;32midx file OK\u001b[0m");
 		Portship.LOG.info("beginning conversion");
-		boolean success = PortshipConverter.convert(idxResult, opts.target, opts.full);
+		boolean success = PortshipExtractor.convert(idxResult, opts.target, opts.full, opts.extractOnly);
 
 		if (success) {
 			Portship.LOG.info("\u001b[32;1;7mSUCCESS\u001b[0m");
