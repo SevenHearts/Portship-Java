@@ -79,7 +79,7 @@ public final class PortshipConverter {
 	private static String makeLogPrefix(int i, int o, boolean full) {
 		String erase = "";
 		if (!full) {
-			erase = "\u001b[F\u001b[2K";
+			erase = "\u001b[2K\u001b[F\u001b[2K";
 		}
 		return String.format(erase + "(%d / %d - %.01f%%)  ", i, o, ((float) i / (float) o) * 100f);
 	}
