@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import svh.portship.PortshipConverter.ConversionResult;
+import svh.portship.PortshipConverter.UnknownTypeException;
 import svh.portship.format.vfs.VFSArchive;
 import svh.portship.format.vfs.VFSFile;
 import svh.portship.format.vfs.VFSManager.IDXResult;
@@ -20,7 +20,7 @@ public final class PortshipExtractor {
 	private PortshipExtractor() {
 	}
 
-	static boolean convert(IDXResult idx, File targetDir, boolean full, boolean extractOnly) {
+	static boolean convert(IDXResult idx, File targetDir, boolean full, boolean extractOnly, boolean smart) {
 		targetDir.mkdirs();
 
 		int total = 0;
@@ -57,19 +57,30 @@ public final class PortshipExtractor {
 				outFilePath = targetDir.toPath().resolve(outFilePath).toString();
 				File outFile = new File(outFilePath);
 
-				outFile.getParentFile().mkdirs();
 
 				try {
 					try (InputStream fis = file.getInputStream()) {
 						if (extractOnly) {
+							outFile.getParentFile().mkdirs();
 							try (FileOutputStream fos = new FileOutputStream(outFile)) {
 								IOUtil.pipe(fis, fos);
 								Portship.LOG.info(progress + "\u001b[36mextracted\u001b[0m " + file.getNormalizedPath());
 							}
 						} else {
-							ConversionResult result = PortshipConverter.convert(outFile, fis, progress);
-							if (result == null) {
-								Portship.LOG.info(progress + String.format("\u001b[1mskip:\u001b[0m %s (skipped)", file.getNormalizedPath()));
+							try {
+								boolean result = PortshipConverter.convert(file, outFile, fis, progress);
+								if (!result) {
+									Portship.LOG.info(progress + String.format("\u001b[1mskip:\u001b[0m %s (skipped)", file.getNormalizedPath()));
+									continue;
+								}
+							} catch (@SuppressWarnings("unused") UnknownTypeException e) {
+								if (smart) {
+									outFile.getParentFile().mkdirs();
+									try (FileOutputStream fos = new FileOutputStream(outFile)) {
+										IOUtil.pipe(fis, fos);
+										Portship.LOG.info(progress + "\u001b[36mextracted\u001b[0m " + file.getNormalizedPath());
+									}
+								}
 							}
 						}
 					}

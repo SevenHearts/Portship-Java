@@ -17,6 +17,11 @@ public class PortshipOptions {
 	public boolean extractOnly = false;
 	
 	@Parameter(
+			names = "--smart",
+			description = "Convert and export, extracting unknown file types")
+	public boolean smart = false;
+	
+	@Parameter(
 			names = { "--all", "--full" },
 			description = "Don't condense the log outputs")
 	public boolean full = false;

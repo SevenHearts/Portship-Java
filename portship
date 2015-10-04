@@ -1,2 +1,11 @@
 #!/bin/bash
-java -cp bin svh.portship.Portship "$@"
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+java -Djava.library.path="$DIR/lib/jmagick/lib/" -cp bin svh.portship.Portship "$@"

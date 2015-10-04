@@ -21,6 +21,10 @@ public class VFSFile {
 	VFSFile(VFSArchive parent) {
 		this.parent = parent;
 	}
+	
+	public long getLength() {
+		return this.length;
+	}
 
 	public VFSArchive getArchive() {
 		return this.parent;
