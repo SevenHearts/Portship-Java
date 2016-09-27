@@ -8,4 +8,5 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-java -Djava.library.path="$DIR/lib/jmagick/lib/" -cp bin svh.portship.Portship "$@"
+echo $DIR/lib/jmagick/lib/:$DIR/lib/gson.jar
+java -Xmx6g -Djava.library.path="$DIR/lib/jmagick/lib/" -cp "bin:$DIR/lib/gson.jar" svh.portship.Portship "$@"
