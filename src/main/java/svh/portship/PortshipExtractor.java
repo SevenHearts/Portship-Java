@@ -57,7 +57,6 @@ public final class PortshipExtractor {
 				outFilePath = targetDir.toPath().resolve(outFilePath).toString();
 				File outFile = new File(outFilePath);
 
-
 				try {
 					try (InputStream fis = file.getInputStream()) {
 						if (extractOnly) {

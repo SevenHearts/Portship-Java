@@ -1,7 +1,0 @@
-[submodule "lib/jmagick"]
-	path = lib/jmagick
-	url = https://github.com/techblue/jmagick.git
-	ignore = dirty
-[submodule "lib/jcommander"]
-	path = lib/jcommander
-	url = https://github.com/cbeust/jcommander.git

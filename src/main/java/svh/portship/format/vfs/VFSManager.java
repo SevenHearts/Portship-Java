@@ -1,7 +1,6 @@
 package svh.portship.format.vfs;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public final class VFSManager {
 
 	private VFSManager() {}
 
-	public static IDXResult loadIDX(File idx) throws FileNotFoundException, IOException {
+	public static IDXResult loadIDX(File idx) throws IOException {
 		IDXResult result = new IDXResult();
 
 		try (final VFSRandomAccessFile d = new VFSRandomAccessFile(idx, "r")) {
